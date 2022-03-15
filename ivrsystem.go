@@ -316,9 +316,9 @@ func (sys *System) GetBoolTrackedDeviceProperty(deviceIndex int, property int) (
 	var cErrorVal C.ETrackedPropertyError
 	answer := convertCBool2Int(C.system_GetBoolTrackedDeviceProperty(sys.ptr, C.TrackedDeviceIndex_t(deviceIndex), C.ETrackedDeviceProperty(property), &cErrorVal))
 	if answer != 0 {
-		return true, cErrorVal
+		return true, int(cErrorVal)
 	}
-	return false, cErrorVal
+	return false, int(cErrorVal)
 }
 
 /* TODO List:
