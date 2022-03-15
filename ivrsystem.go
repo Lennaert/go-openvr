@@ -41,6 +41,10 @@ ETrackedDeviceClass system_GetTrackedDeviceClass(struct VR_IVRSystem_FnTable* iS
     return iSystem->GetTrackedDeviceClass(unDeviceIndex);
 }
 
+ETrackedControllerRole system_GetControllerRoleForTrackedDeviceIndex(struct VR_IVRSystem_FnTable* iSystem, TrackedDeviceIndex_t unDeviceIndex) {
+	return iSystem->GetControllerRoleForTrackedDeviceIndex(unDeviceIndex);
+}
+
 uint32_t system_GetStringTrackedDeviceProperty(struct VR_IVRSystem_FnTable* iSystem, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, char * pchValue, uint32_t unBufferSize, ETrackedPropertyError * pError) {
     return _iSystem->GetStringTrackedDeviceProperty(unDeviceIndex, prop, pchValue, unBufferSize, pError);
 }
@@ -180,6 +184,11 @@ func (sys *System) GetTrackedDeviceClass(deviceIndex int) int {
 	return int(result)
 }
 
+// GetControllerRoleForTrackedDeviceIndex returns the role for a tracked device
+func (sys *System) GetControllerRoleForTrackedDeviceIndex(deviceIndex int) int {
+	result := C.system_GetControllerRoleForTrackedDeviceIndex(sys.ptr, C.TrackedDeviceIndex_t(deviceIndex))
+	return int(result)
+}
 
 // GetStringTrackedDeviceProperty returns a string property. If the device index is not valid or the property is
 // not a string type this function will an empty string. The int returned correspnds to the ETrackedPropertyError enumeration.
@@ -338,7 +347,6 @@ uint32_t (OPENVR_FNTABLE_CALLTYPE *GetSortedTrackedDeviceIndicesOfClass)(ETracke
 EDeviceActivityLevel (OPENVR_FNTABLE_CALLTYPE *GetTrackedDeviceActivityLevel)(TrackedDeviceIndex_t unDeviceId);
 void (OPENVR_FNTABLE_CALLTYPE *ApplyTransform)(struct TrackedDevicePose_t * pOutputPose, struct TrackedDevicePose_t * pTrackedDevicePose, struct HmdMatrix34_t * pTransform);
 TrackedDeviceIndex_t (OPENVR_FNTABLE_CALLTYPE *GetTrackedDeviceIndexForControllerRole)(ETrackedControllerRole unDeviceType);
-ETrackedControllerRole (OPENVR_FNTABLE_CALLTYPE *GetControllerRoleForTrackedDeviceIndex)(TrackedDeviceIndex_t unDeviceIndex);
 float (OPENVR_FNTABLE_CALLTYPE *GetFloatTrackedDeviceProperty)(TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
 uint64_t (OPENVR_FNTABLE_CALLTYPE *GetUint64TrackedDeviceProperty)(TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
 struct HmdMatrix34_t (OPENVR_FNTABLE_CALLTYPE *GetMatrix34TrackedDeviceProperty)(TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
