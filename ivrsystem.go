@@ -41,9 +41,12 @@ ETrackedDeviceClass system_GetTrackedDeviceClass(struct VR_IVRSystem_FnTable* iS
     return iSystem->GetTrackedDeviceClass(unDeviceIndex);
 }
 
-
 uint32_t system_GetStringTrackedDeviceProperty(struct VR_IVRSystem_FnTable* iSystem, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, char * pchValue, uint32_t unBufferSize, ETrackedPropertyError * pError) {
     return _iSystem->GetStringTrackedDeviceProperty(unDeviceIndex, prop, pchValue, unBufferSize, pError);
+}
+
+bool system_GetBoolTrackedDeviceProperty(struct VR_IVRSystem_FnTable* iSystem, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError) {
+    return _iSystem->GetBoolTrackedDeviceProperty(unDeviceIndex, prop, pError);
 }
 
 bool system_PollNextEvent(struct VR_IVRSystem_FnTable* iSystem, struct VREvent_t * pEvent, uint32_t uncbVREvent) {
@@ -307,6 +310,17 @@ func (sys *System) GetInt32TrackedDeviceProperty(deviceIndex int, property int) 
 	return int32(cInt32Prop), int(cErrorVal)
 }
 
+// GetBoolTrackedDeviceProperty returns a bool property. If the device index is not valid or the property is
+// not valid it will return false. The second int returned corresponds to the ETrackedPropertyError enumeration.
+func (sys *System) GetBoolTrackedDeviceProperty(deviceIndex int, property int) (bool, int) {
+	var cErrorVal C.ETrackedPropertyError
+	answer := convertCBool2Int(C.system_GetBoolTrackedDeviceProperty(sys.ptr, C.TrackedDeviceIndex_t(deviceIndex), C.ETrackedDeviceProperty(property), &cErrorVal))
+	if answer != 0 {
+		return true, cErrorVal
+	}
+	return false, cErrorVal
+}
+
 /* TODO List:
 
 void (OPENVR_FNTABLE_CALLTYPE *GetProjectionRaw)(EVREye eEye, float * pfLeft, float * pfRight, float * pfTop, float * pfBottom);
@@ -325,7 +339,6 @@ EDeviceActivityLevel (OPENVR_FNTABLE_CALLTYPE *GetTrackedDeviceActivityLevel)(Tr
 void (OPENVR_FNTABLE_CALLTYPE *ApplyTransform)(struct TrackedDevicePose_t * pOutputPose, struct TrackedDevicePose_t * pTrackedDevicePose, struct HmdMatrix34_t * pTransform);
 TrackedDeviceIndex_t (OPENVR_FNTABLE_CALLTYPE *GetTrackedDeviceIndexForControllerRole)(ETrackedControllerRole unDeviceType);
 ETrackedControllerRole (OPENVR_FNTABLE_CALLTYPE *GetControllerRoleForTrackedDeviceIndex)(TrackedDeviceIndex_t unDeviceIndex);
-bool (OPENVR_FNTABLE_CALLTYPE *GetBoolTrackedDeviceProperty)(TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
 float (OPENVR_FNTABLE_CALLTYPE *GetFloatTrackedDeviceProperty)(TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
 uint64_t (OPENVR_FNTABLE_CALLTYPE *GetUint64TrackedDeviceProperty)(TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
 struct HmdMatrix34_t (OPENVR_FNTABLE_CALLTYPE *GetMatrix34TrackedDeviceProperty)(TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
