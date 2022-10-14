@@ -69,7 +69,7 @@ uint32_t system_GetInt32TrackedDeviceProperty(struct VR_IVRSystem_FnTable* iSyst
     return _iSystem->GetInt32TrackedDeviceProperty(unDeviceIndex, prop, pError);
 }
 
-float system_GetInt32TrackedDeviceProperty(struct VR_IVRSystem_FnTable* iSystem, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop,ETrackedPropertyError * pError) {
+float system_GetFloatTrackedDeviceProperty(struct VR_IVRSystem_FnTable* iSystem, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop,ETrackedPropertyError * pError) {
     return _iSystem->GetFloatTrackedDeviceProperty(unDeviceIndex, prop, pError);
 }
 
