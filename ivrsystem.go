@@ -327,7 +327,7 @@ func (sys *System) GetInt32TrackedDeviceProperty(deviceIndex int, property int) 
 // not valid it will return 0. The second int returned corresponds to the ETrackedPropertyError enumeration.
 func (sys *System) GetFloatTrackedDeviceProperty(deviceIndex int, property int) (float32, int) {
 	var cErrorVal C.ETrackedPropertyError
-	cFloat32Prop := C.system_GetInt32TrackedDeviceProperty(sys.ptr, C.TrackedDeviceIndex_t(deviceIndex), C.ETrackedDeviceProperty(property), &cErrorVal)
+	cFloat32Prop := C.system_GetFloatTrackedDeviceProperty(sys.ptr, C.TrackedDeviceIndex_t(deviceIndex), C.ETrackedDeviceProperty(property), &cErrorVal)
 	return float32(cFloat32Prop), int(cErrorVal)
 }
 
